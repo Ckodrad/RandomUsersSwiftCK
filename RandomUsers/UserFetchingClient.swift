@@ -11,9 +11,9 @@ struct UserFetchingClient {
     // Declaring the URL
     static private let url = URL(string:"https://randomuser.me/api/?results=10&format=pretty")!
     
-    static func getUsers() async throws -> String {
+    static func getUsers() async throws -> [User] {
         async let (data, _) = URLSession.shared.data(from:url)
-        return try await String(data: data, encoding: .utf8)! // Displaying as a raw String
-        
+        let response = try await JSONDecoder().decode(Response.self, from: data) // Displaying as a raw String
+        return response.users
     }
 }
